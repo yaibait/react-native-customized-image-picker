@@ -11,7 +11,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
+import java.io.ByteArrayOutputStream;
+import android.util.Base64;
 import cn.finalteam.rxgalleryfinal.RxGalleryFinalApi;
 import id.zelory.compressor.Compressor;
 
@@ -63,7 +64,14 @@ class Compression {
         return compressor
                 .compressToFile(image, compressedFileName);
     }
-
+    public String createImageThumbnailBase64(final Activity activity,final String originalImagePath) throws IOException {
+        File actualImageFile = new File(originalImagePath);
+        Bitmap compressedImageBitmap = new Compressor(activity).compressToBitmap(actualImageFile);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();  
+        compressedImageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.NO_WRAP);
+    }
     synchronized void compressVideo(final Activity activity, final ReadableMap options,
                                     final String originalVideo, final String compressedVideo, final Promise promise) {
         // todo: video compression
