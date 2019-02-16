@@ -166,9 +166,12 @@ class PickerModule extends ReactContextBaseJavaModule {
         image.putInt("height", options.outHeight);
         image.putString("mime", options.outMimeType);
         image.putInt("size", (int) new File(compressedImagePath).length());
+        
 
         if (includeBase64) {
             image.putString("data", getBase64StringFromFile(compressedImagePath));
+            //BinhND create thumb image
+            image.putString("thumbData",compression.createImageThumbnailBase64(activity, path));
         }
 
         return image;
